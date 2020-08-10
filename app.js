@@ -8,7 +8,7 @@ const teddyRoutes = require('./routes/teddy');
 const furnitureRoutes = require('./routes/furniture');
 
 const app = express();
-
+mongoose.set('useUnifiedTopology', true);
 mongoose.connect(
   'mongodb+srv://will:nAcmfCoHGDgzrCHG@cluster0-pme76.mongodb.net/test?retryWrites=true',
   { useNewUrlParser: true })
@@ -20,6 +20,7 @@ mongoose.connect(
     console.error(error);
   });
 
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -28,6 +29,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/javascript', express.static(path.join(__dirname, 'javascript')));
+app.use('/', express.static(path.join(__dirname)));
+
 
 app.use(bodyParser.json());
 
