@@ -1,5 +1,7 @@
-.carousel-custom-height img{
-    width: auto;
-    height: 400px;
-    max-height: 400px;
+.table-image td {
+    vertical-align: middle;
+}
+
+.table-image th {
+    vertical-align: middle;
 }
