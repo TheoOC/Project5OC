@@ -26,32 +26,29 @@
 <body class="bg-dark">
 
     <head>
-        <div class="bg-dark">
-            <div class="container">
-                <div class="row">
-                    <div class="col navbar navbar-expand-sm navbar-dark">
-                        <a class="navbar-brand" href="../index.html">Orinoco</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarContent">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div id="navbarContent" class="collapse navbar-collapse navbar-right">
-                            <ul class="navbar-nav">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="../index.html">Acceuil</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="../html/panier.html">Panier</a>
-                                </li>
-                            </ul>
-                        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col navbar navbar-expand-sm navbar-dark">
+                    <a class="navbar-brand" href="../index.html">Orinoco</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div id="navbarContent" class="collapse navbar-collapse navbar-right">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="../index.html">Acceuil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../html/panier.html">Panier</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </head>
     <main>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
@@ -60,30 +57,61 @@
                     </div>
                 </div>
             </div>
-            <table class="table-responsive table table-striped table-dark table-borderless table-image">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="cartList">
 
-                </tbody>
-            </table>
-            <form>
-                <div class="form-group">
-                    <label for=""></label>
-                    <input type="" class="form-control" id="" placeholder="">
+            <!-------------------------panier---------------------->
+            <div class="row d-flex justify-content-center align-items-center mt-4">
+                <div class="col-md-10">
+                    <table class="table-responsive table table-striped table-dark table-borderless table-image">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="cartList">
+
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
+
+            <!-----------------------formulaire---------------------->
+            <div class="row d-flex justify-content-center align-items-center mt-4">
+                <div class="col-md-10">
+                    <form class="text-white">
+                        <div class="form-row">
+                            <div class="form-group col-lg-6 col-md-12">
+                                <label for="inputEmail">Email</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6">
+                                <label for="inputFirstName">firstName</label>
+                                <input type="text" class="form-control" id="inputFirstName" placeholder="firstName">
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6">
+                                <label for="inputLastName">lastName</label>
+                                <input type="text" class="form-control" id="inputLastName" placeholder="lastName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label for="inputCity">City</label>
+                                <input type="text" class="form-control" id="inputCity">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Payer</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-
     </main>
 
     <footer></footer>
