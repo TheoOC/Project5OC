@@ -82,6 +82,7 @@ async function main() {
     });
 }
 
+//update the count of item
 function updateItem(name, storage) {
     if (storage) {
         let panier = JSON.parse(storage["panier"]);

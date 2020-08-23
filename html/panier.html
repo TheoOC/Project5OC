@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
-<header>
+<html lang="fr">
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -21,11 +22,11 @@
     <script src="../javascript/panier.js" defer></script>
     <title>Hello, world!</title>
 
-</header>
+</head>
 
 <body class="bg-dark">
 
-    <head>
+    <header>
         <div class="container">
             <div class="row">
                 <div class="col navbar navbar-expand-sm navbar-dark">
@@ -46,7 +47,7 @@
                 </div>
             </div>
         </div>
-    </head>
+    </header>
     <main>
 
         <div class="container-fluid">
@@ -58,35 +59,37 @@
                 </div>
             </div>
 
-            <!-------------------------panier---------------------->
+            <!---                   panier               -->
             <div class="row d-flex justify-content-center align-items-center mt-4">
                 <div class="col-md-10">
-                    <table class="table-responsive table table-striped table-dark table-borderless table-image">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
+                    <div class="table-responsive ">
+                        <table class="table table-striped table-dark table-borderless table-image">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
 
-                        <tbody id="cartList">
+                            <tbody id="cartList">
 
-                        </tbody>
+                            </tbody>
 
-                    </table>
+                        </table>
+                    </div>
                     <button type="button" class="d-block btn btn-warning btn-lg btn-block" id="clearCart">clear
                         cart</button>
                 </div>
             </div>
 
-            <!-----------------------formulaire---------------------->
+            <!--                formulaire                      -->
             <div class="row d-flex justify-content-center align-items-center mt-4">
                 <div class="col-md-10">
-                    <form class="text-white" id="contactForm">
+                    <form class="text-white" id="contactForm" action="../html/confirmation.html">
                         <div class="form-row">
                             <div class="form-group col-lg-6 col-md-12">
                                 <label for="inputEmail">Email</label>
@@ -95,7 +98,7 @@
                             <div class="form-group col-lg-3 col-md-6">
                                 <label for="inputFirstName">First Name</label>
                                 <input type="text" class="form-control" id="inputFirstName" placeholder="Kamron">
-                                
+
                             </div>
                             <div class="form-group col-lg-3 col-md-6">
                                 <label for="inputLastName">Last Name</label>

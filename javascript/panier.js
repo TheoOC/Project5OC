@@ -46,10 +46,8 @@ clearCart.addEventListener("click", function (event) {
 });
 //buy button
 $("#contactForm").submit(function (event) {
-    event.preventDefault();
     console.log("clicked");
     try {
-
         //get contact infos
         let contact = getContact();
         //get items ids
@@ -62,17 +60,31 @@ $("#contactForm").submit(function (event) {
         postRequest(url, JSON.stringify(data))
             .then(function (request) {
                 let response = JSON.parse(request.response);
-                console.log(response);
+                //get the id of the cart
+                let orderId = response.orderId;
+                console.log("order id : " + orderId);
+                //save the orderId in the localStorage
+                saveOrderId(orderId);
             });
     }
     catch (e) {
         console.error(e.name + ': ' + e.message);
+        event.preventDefault();
     }
 
 });
 
 
 //----------------functions-------------------------
+
+function saveOrderId(orderId){
+    //remove previous id if there is already one
+    if(localStorage.orderId){
+        localStorage.removeItem("orderId");
+    }
+    //replace it with the new one
+    localStorage.setItem("orderId", JSON.stringify(orderId));
+}
 
 function getIds() {
     //array of ids

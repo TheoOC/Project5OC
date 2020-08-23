@@ -38,7 +38,7 @@ function createCard(title, text, buttonTEXT, imageURL, id) {
     '<div class="card-body">' +
     '<h4 class="card-title">titleTemp</h4>' +
     '<p class="card-text">textTemp</p>' +
-    '<a class="btn btn-primary" href="./html/produit.html?id=idTemp">buttonTemp</a>' +
+    '<a class="btn btn-primary" href="../html/produit.html?id=idTemp">buttonTemp</a>' +
     '</div>' +
     '</div>' +
     '</div>';
