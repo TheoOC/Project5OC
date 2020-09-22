@@ -1,6 +1,6 @@
 let items;
 let unparsedCart = localStorage.panier;
-//parse the panier in localStorage
+//parse le panier qui est dans le localStorage si le panier n'est pas vide
 if (unparsedCart) {
     items = sortItems(JSON.parse(localStorage["panier"]));
 }
@@ -8,43 +8,44 @@ console.log(items);
 
 /* ---------------display HTML-----------------*/
 let cartList = document.getElementById('cartList');
-//if cartList empty don t need to display the cart
+//si carList est vide pas besoin d'afficher le panier
 if (cartList) {
     displayCart(items, cartList);
 }
 
 /* -------------------buttons--------------------*/
-//add button
+//bouton ajouter item
 $("#cartList").on("click", ".add-item", function (event) {
-    //get the name in the data-name attribute of the button with class .add-item in the cartList id
+    /*on obtien le nom qui est dans le data-name attribut du boutton qui
+     a pour classe .add-item qui est dans dans la balise qui a pour id cartList*/
     let name = $(this).attr("data-name");
     addItem(name);
     displayCart(items, cartList);
 });
 
-//subtract button
+//bouton soustraire item
 $("#cartList").on("click", ".subtract-item", function (event) {
     let name = $(this).attr("data-name");
     removeItemFromCart(name);
     displayCart(items, cartList);
 });
-//remove button
+//bouton supprimer item
 $("#cartList").on("click", ".remove-item", function (event) {
     let name = $(this).attr("data-name");
     removeAllItemsFromCart(name);
     displayCart(items, cartList);
 });
-//clear button
+//bouton pour remettre le panier a zero
 let clearCart = document.getElementById("clearCart");
 clearCart.addEventListener("click", function (event) {
-    //if array not empty, empty the array
+    //si l array n est pas vide, on la vide
     if (items) {
         items.splice(0, items.length);
     }
     saveCart();
     displayCart(items, cartList);
 });
-//buy button
+//bouton acheter
 $("#contactForm").submit(function (event) {
     console.log("clicked");
     try {
@@ -65,6 +66,14 @@ $("#contactForm").submit(function (event) {
                 console.log("order id : " + orderId);
                 //save the orderId in the localStorage
                 saveOrderId(orderId);
+            })
+            .catch(function (posts) {
+                console.log(
+                    "something went wrong!! status: " +
+                    posts.status +
+                    " statusText " +
+                    posts.statusText
+                );
             });
     }
     catch (e) {
@@ -77,15 +86,15 @@ $("#contactForm").submit(function (event) {
 
 //----------------functions-------------------------
 
-function saveOrderId(orderId){
+function saveOrderId(orderId) {
     //remove previous id if there is already one
-    if(localStorage.orderId){
+    if (localStorage.orderId) {
         localStorage.removeItem("orderId");
     }
     //replace it with the new one
     localStorage.setItem("orderId", JSON.stringify(orderId));
 }
-
+//get all the ids from the items
 function getIds() {
     //array of ids
     let temp = [];
@@ -103,8 +112,8 @@ function getIds() {
 }
 
 function postRequest(url, data) {
-    let request = new XMLHttpRequest();
     return new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
         request.open('POST', url);
         request.setRequestHeader('Content-Type', 'application/json');
 
@@ -125,44 +134,33 @@ function postRequest(url, data) {
         request.send(data);
     });
 }
-
-/**
- *
- * Expects request to contain:
- * contact: {
- *   firstName: string,
- *   lastName: string,
- *   address: string,
- *   city: string,
- *   email: string
- * }
- * products: [string] <-- array of product _id
- *
- */
-
 function getContact() {
+    //create a regular expression
+    let reg = /^[A-Za-z]+$/;
     //get all the contact infos from if available else show an alert
     let tfn = document.getElementById("inputFirstName");
-    if (!tfn.value) {
-        displayErrorForm(tfn, "missing First Name");
-    }
-    let tln = document.getElementById("inputLastName");
-    if (!tln.value) {
-        displayErrorForm(tln, "missing Last Name");
-    }
-    let tadd = document.getElementById("inputAddress");
-    if (!tadd.value) {
-        displayErrorForm(tadd, "missing Address");
-    }
-    let tcity = document.getElementById("inputCity");
-    if (!tcity.value) {
-        displayErrorForm(tcity, "missing City");
-    }
-    let temail = document.getElementById("inputEmail");
-    if (!temail.value) {
-        displayErrorForm(temail, "missing Email");
+    if (!tfn.value) { displayErrorForm(tfn, "missing First Name"); }
+    else if (!(reg.test(tfn.value))) { displayErrorForm(tfn, "First Name can only have letters") }
+    else { removeAlert(tfn); }
 
-    }
+    let tln = document.getElementById("inputLastName");
+    if (!tln.value) { displayErrorForm(tln, "missing Last Name"); }
+    else if (!(reg.test(tln.value))) { displayErrorForm(tln, "Last Name can only have letters") }
+    else { removeAlert(tln); }
+
+    let tadd = document.getElementById("inputAddress");
+    if (!tadd.value) { displayErrorForm(tadd, "missing Address"); }
+    else { removeAlert(tadd); }
+
+    let tcity = document.getElementById("inputCity");
+    if (!tcity.value) { displayErrorForm(tcity, "missing City"); }
+    else if (!(reg.test(tcity.value))) { displayErrorForm(tcity, "city can only have letters") }
+    else { removeAlert(tcity); }
+
+    let temail = document.getElementById("inputEmail");
+    if (!temail.value) { displayErrorForm(temail, "missing Email"); }
+    else { removeAlert(temail); }
+
     let contact = {
         firstName: tfn.value,
         lastName: tln.value,
@@ -184,24 +182,35 @@ function displayErrorForm(elementId, msg) {
         let lastChild = elementId.parentElement.lastElementChild;
         //check if there already is an alert 
         if (lastChild.classList.contains("alert")) {
+            removeAlert(elementId);
             console.log("already an alert");
         }
         //if no alert insert it after the element
-        else {
-            let string = '<div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">' +
-                '<strong>' + msg + '</strong> ' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                '<span aria-hidden="true">&times;</span>' +
-                '</button>' +
-                '</div>';
-            elementId.insertAdjacentHTML('afterend', string);
-        }
+
+        let string = '<div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">' +
+            '<strong>' + msg + '</strong> ' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '</button>' +
+            '</div>';
+        elementId.insertAdjacentHTML('afterend', string);
+
     }
     else {
         console.log("error elementId not initialized or not available");
     }
-
-
+}
+function removeAlert(elementId) {
+    //verify element Id est valable
+    if (elementId) {
+        //get last element
+        let lastChild = elementId.parentElement.lastElementChild;
+        //verifie qu il y a une alerte
+        if (lastChild.classList.contains("alert")) {
+            //enleve le html
+            lastChild.remove();
+        }
+    }
 }
 
 function addItem(name) {
@@ -209,7 +218,7 @@ function addItem(name) {
     for (let i in items) {
         //check name
         if (items[i].name == name) {
-            //add 1 count
+            //ajoute 1 a count
             items[i].count += 1;
             break;
         }
@@ -241,7 +250,7 @@ function removeAllItemsFromCart(name) {
 }
 
 function displayCart(items, elementId) {
-    //clear html first
+    //clear le html
     elementId.textContent = "";
     for (let i = 0; i < items.length; i++) {
         let tempString =
@@ -259,7 +268,7 @@ function displayCart(items, elementId) {
             '<h4>' + items[i].count + '</h4>' +
             '</td>' +
             '<td>' +
-            '<h4>' + items[i].price * items[i].count + '</h4>' +
+            '<h4>' + (items[i].price * items[i].count) / 100 + "€" + '</h4>' +
             '</td>' +
             '<td>' +
             '<button type="button" data-name="' + items[i].name + '" class="subtract-item d-block btn btn-warning btn-lg btn-block">-</button>' +
@@ -272,20 +281,20 @@ function displayCart(items, elementId) {
 }
 
 function displayItem(elementId, stringHtml) {
-    elementId.insertAdjacentHTML('afterbegin', stringHtml);
+    elementId.insertAdjacentHTML('beforeend', stringHtml);
 }
-//sort in reverse
+//trie par nom 
 function sortItems(itemsArray) {
-    //check if array is null
+    //on verifie que l array n est pas vide
     if (itemsArray) {
         let tempArray = itemsArray;
-        //sort by name
+        //trier par nom
         tempArray.sort(function (a, b) {
             if (a.name > b.name) {
-                return -1;
+                return 1;
             }
             if (a.name < b.name) {
-                return 1;
+                return -1;
             }
             return 0;
         });

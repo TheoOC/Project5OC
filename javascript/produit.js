@@ -5,7 +5,6 @@ console.log(requestURL);
 main();
 
 async function main() {
-
     let curItem;
     let name;
     //connect to api
@@ -13,21 +12,21 @@ async function main() {
         //add html dynamically
         .then(function (request) {
             let response = JSON.parse(request.response);
-            console.log("request success");
             //dynamically create string of html
             let stringHTML = createTeddy(
                 response.name,
                 response.imageUrl,
                 response.description,
-                response.price + "€",
-                response.colors);
+                response.price,
+                response.colors
+            );
             let displayTeddy = document.getElementById("teddyProduct");
             //add the html to the page
             displayTeddy.insertAdjacentHTML("afterbegin", stringHTML);
             return response;
         })
         .then(function (response) {
-            //check if there is already a cart
+            //check if there is already a cart in the localStorage
             let bItem = false;
             if (localStorage.panier) {
                 let panier = JSON.parse(localStorage["panier"]);
@@ -45,12 +44,15 @@ async function main() {
             //else create a new item
             if (bItem == false) {
                 console.log("creating new item");
-                curItem = new item(response.colors,
-                    response._id, response.name,
+                curItem = new item(
+                    response.colors,
+                    response._id,
+                    response.name,
                     response.price,
                     response.imageUrl,
                     response.description,
-                    1);
+                    1
+                );
             }
         })
         .catch(function (posts) {
@@ -97,23 +99,20 @@ function updateItem(name, storage) {
 }
 
 function addToStorage(item, storage) {
-
     let panier;
     //check if panier is defined
     if (!storage["panier"]) {
         panier = [];
-    }
-    else {
+    } else {
         panier = JSON.parse(storage["panier"]);
     }
     console.log(panier);
     //check if deserialized variable is an item
     /*if( !(panier[0] instanceof item)){
-        panier = [];
-    }*/
+              panier = [];
+          }*/
     panier.push(item);
     storage.setItem("panier", JSON.stringify(panier));
-
 }
 
 function item(colors, id, name, price, imageUrl, description, count) {
@@ -127,9 +126,8 @@ function item(colors, id, name, price, imageUrl, description, count) {
 }
 
 function makeRequest(url) {
-    let request = new XMLHttpRequest();
-
     return new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (request.readyState !== 4) return;
             if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
@@ -139,7 +137,7 @@ function makeRequest(url) {
                 reject({
                     status: request.status,
                     statusText: request.statusText,
-                })
+                });
                 return;
             }
         };
@@ -152,15 +150,24 @@ function createTeddy(name, imageURL, description, price, colors) {
     let colorList = createColorList(colors);
 
     let string =
-        '<div class="col-8 col-md-6 col-xl-4">' +
+        '<div class="col-10 col-md-8 col-lg-6 col-xl-4">' +
         '<div class="card box-shadow">' +
         '<div class="card-header">' +
-        '<h4 class="my-0 font-weight-normal">nameTemp</h4>' +
+        '<h4 class="my-0 font-weight-normal">' +
+        name +
+        "</h4>" +
         "</div>" +
-        '<img class="card-img-top" src="imageURLTemp" alt="Card image cap">' +
+        '<img class="card-img-top" src="' +
+        imageURL +
+        '" alt="Card image cap">' +
         '<div class="card-body">' +
-        '<h4 class="card-title pricing-card-title">priceTemp</h4>' +
-        '<p class="card-text ">descriptionTemp</p>' +
+        '<h4 class="card-title pricing-card-title">' +
+        price / 100 +
+        " €" +
+        "</h4>" +
+        '<p class="card-text ">' +
+        description +
+        "</p>" +
         '<div class="form-group">' +
         '<label for="colorsSelect ">Colors (select one):</label>' +
         '<select class="form-control btn-primary" id="colorsSelect">' +
@@ -169,11 +176,6 @@ function createTeddy(name, imageURL, description, price, colors) {
         '<a  class="btn btn-lg btn-block btn-outline-primary mt-2" href="panier.html" id="addBasket">Ajouter au panier</a>' +
         "</div>" +
         "</div>";
-
-    string = string.replace("nameTemp", name);
-    string = string.replace("imageURLTemp", imageURL);
-    string = string.replace("priceTemp", price);
-    string = string.replace("descriptionTemp", description);
     return string;
 }
 
@@ -185,7 +187,6 @@ function createColorList(colors) {
     }
     return string;
 }
-
 
 function getPageId() {
     let url = window.location.search.substring(1);
