@@ -1,5 +1,3 @@
-console.log(JSON.stringify(localStorage.orderId));
-
 let orderId = document.getElementById("orderId");
 let prixTotal = document.getElementById("prixTotal");
 

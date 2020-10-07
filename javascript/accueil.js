@@ -3,6 +3,7 @@ let teddyList = document.getElementById("teddy-list");
 getRequest("http://localhost:3000/api/teddies")
   .then(function (request) {
     let response = JSON.parse(request.response);
+    //obtien le nombre d'items
     let arrayLength = response.length;
     console.log(arrayLength);
 

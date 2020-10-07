@@ -8,7 +8,7 @@ console.log(items);
 
 /* ---------------display HTML-----------------*/
 let cartList = document.getElementById('cartList');
-//si carList est vide pas besoin d'afficher le panier
+
 if (cartList) {
     displayCart(items, cartList);
 }
@@ -276,13 +276,10 @@ function displayCart(items, elementId) {
             '<button type="button" data-name="' + items[i].name + '" class="remove-item d-block btn btn-danger btn-lg btn-block ">x Remove</button>' +
             '</td>' +
             '</tr>';
-        displayItem(elementId, tempString);
+        elementId.insertAdjacentHTML('beforeend', tempString);
     }
 }
 
-function displayItem(elementId, stringHtml) {
-    elementId.insertAdjacentHTML('beforeend', stringHtml);
-}
 //trie par nom 
 function sortItems(itemsArray) {
     //on verifie que l array n est pas vide
