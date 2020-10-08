@@ -3,15 +3,15 @@ let teddyList = document.getElementById("teddy-list");
 getRequest("http://localhost:3000/api/teddies")
   .then(function (request) {
     let response = JSON.parse(request.response);
-    //obtien le nombre d'items
+    //get number of items
     let arrayLength = response.length;
     console.log(arrayLength);
 
-    //creer chaques cartes
+    //create each card
     for (let i = 0; i < arrayLength; i++) {
       let stringTemp = createCard(response[i].name,
-        (response[i].price) / 100 + " €", //convertir le prix de centimes en euros
-        "buy",
+        (response[i].price) / 100 + " €", //convert from cents to euros
+        "acheter",
         response[i].imageUrl,
         response[i]._id);
       teddyList.insertAdjacentHTML('beforeend', stringTemp);

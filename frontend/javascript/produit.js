@@ -12,7 +12,6 @@ async function main() {
         //add html dynamically
         .then(function (request) {
             let response = JSON.parse(request.response);
-            //dynamically create string of html
             let stringHTML = createTeddy(
                 response.name,
                 response.imageUrl,
@@ -28,13 +27,12 @@ async function main() {
         .then(function (response) {
             //check if there is already a cart in the localStorage
             let bItem = false;
-            if (localStorage.panier) {
-                let panier = JSON.parse(localStorage["panier"]);
-                let length = panier.length;
-                console.log("panier length " + length);
+            if (localStorage.cart) {
+                let cart = JSON.parse(localStorage["cart"]);
+                let length = cart.length;
                 for (let i = 0; i < length; i++) {
                     //check if there is already the same item in the cart
-                    if (panier[i].name == response.name) {
+                    if (cart[i].name == response.name) {
                         bItem = true;
                         name = response.name;
                         console.log(name);
@@ -67,8 +65,8 @@ async function main() {
     console.log("finished make request");
 
     //add to the basket when clicked
-    let panier = document.getElementById("addBasket");
-    panier.addEventListener("click", function () {
+    let cart = document.getElementById("addBasket");
+    cart.addEventListener("click", function () {
         //if it was not in the cart add the item to the storage
         if (curItem) {
             console.log("adding to storage");
@@ -80,39 +78,35 @@ async function main() {
             updateItem(name, localStorage);
         }
         console.log("added to basket");
-        console.log(localStorage.panier);
+        console.log(localStorage.cart);
     });
 }
 
 //update the count of item
 function updateItem(name, storage) {
     if (storage) {
-        let panier = JSON.parse(storage["panier"]);
-        console.log(panier);
-        for (let i = 0; i < panier.length; i++) {
-            if (panier[i].name == name) {
-                panier[i].count += 1;
+        let cart = JSON.parse(storage["cart"]);
+        console.log(cart);
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].name == name) {
+                cart[i].count += 1;
             }
         }
-        storage.setItem("panier", JSON.stringify(panier));
+        storage.setItem("cart", JSON.stringify(cart));
     }
 }
 
 function addToStorage(item, storage) {
-    let panier;
-    //check if panier is defined
-    if (!storage["panier"]) {
-        panier = [];
+    let cart;
+    //check if cart is defined
+    if (!storage["cart"]) {
+        cart = [];
     } else {
-        panier = JSON.parse(storage["panier"]);
+        cart = JSON.parse(storage["cart"]);
     }
-    console.log(panier);
-    //check if deserialized variable is an item
-    /*if( !(panier[0] instanceof item)){
-              panier = [];
-          }*/
-    panier.push(item);
-    storage.setItem("panier", JSON.stringify(panier));
+    console.log(cart);
+    cart.push(item);
+    storage.setItem("cart", JSON.stringify(cart));
 }
 
 function item(colors, id, name, price, imageUrl, description, count) {

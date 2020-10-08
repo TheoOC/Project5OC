@@ -1,8 +1,8 @@
 let items;
-let unparsedCart = localStorage.panier;
-//parse le panier qui est dans le localStorage si le panier n'est pas vide
+let unparsedCart = localStorage.cart;
+//parse cart in local storage if the cart is not empty
 if (unparsedCart) {
-    items = sortItems(JSON.parse(localStorage["panier"]));
+    items = sortItems(JSON.parse(localStorage["cart"]));
 }
 console.log(items);
 
@@ -14,38 +14,41 @@ if (cartList) {
 }
 
 /* -------------------buttons--------------------*/
-//bouton ajouter item
+//add button
 $("#cartList").on("click", ".add-item", function (event) {
-    /*on obtien le nom qui est dans le data-name attribut du boutton qui
+    /*on obtien lenom qui est dans le data-name attribut du boutton qui
      a pour classe .add-item qui est dans dans la balise qui a pour id cartList*/
+     /*we get the name which is in the data-name attribute
+     from the button which has for class .add-item which is in
+     the element which has the cartList id */
     let name = $(this).attr("data-name");
     addItem(name);
     displayCart(items, cartList);
 });
 
-//bouton soustraire item
+//subtract button
 $("#cartList").on("click", ".subtract-item", function (event) {
     let name = $(this).attr("data-name");
     removeItemFromCart(name);
     displayCart(items, cartList);
 });
-//bouton supprimer item
+//button delete item
 $("#cartList").on("click", ".remove-item", function (event) {
     let name = $(this).attr("data-name");
     removeAllItemsFromCart(name);
     displayCart(items, cartList);
 });
-//bouton pour remettre le panier a zero
+//button to reset cart
 let clearCart = document.getElementById("clearCart");
 clearCart.addEventListener("click", function (event) {
-    //si l array n est pas vide, on la vide
+    //if array not empty we empty it
     if (items) {
         items.splice(0, items.length);
     }
     saveCart();
     displayCart(items, cartList);
 });
-//bouton acheter
+//buy button
 $("#contactForm").submit(function (event) {
     console.log("clicked");
     try {
@@ -61,10 +64,10 @@ $("#contactForm").submit(function (event) {
         postRequest(url, JSON.stringify(data))
             .then(function (request) {
                 let response = JSON.parse(request.response);
-                //get the id of the cart
+                //get id from cart
                 let orderId = response.orderId;
                 console.log("order id : " + orderId);
-                //save the orderId in the localStorage
+                //save orderId in localStorage
                 saveOrderId(orderId);
             })
             .catch(function (posts) {
@@ -84,10 +87,10 @@ $("#contactForm").submit(function (event) {
 });
 
 
-//----------------functions-------------------------
+//---------------functions-------------------------
 
 function saveOrderId(orderId) {
-    //remove previous id if there is already one
+    //remove previous orderId
     if (localStorage.orderId) {
         localStorage.removeItem("orderId");
     }
@@ -137,7 +140,7 @@ function postRequest(url, data) {
 function getContact() {
     //create a regular expression
     let reg = /^[A-Za-z]+$/;
-    //get all the contact infos from if available else show an alert
+    //get all the contact infos if available else show an alert
     let tfn = document.getElementById("inputFirstName");
     if (!tfn.value) { displayErrorForm(tfn, "missing First Name"); }
     else if (!(reg.test(tfn.value))) { displayErrorForm(tfn, "First Name can only have letters") }
@@ -168,7 +171,7 @@ function getContact() {
         city: tcity.value,
         email: temail.value
     };
-    //if one of the contact infos is missing throw an error 
+    //if one of the contact infos is missing throw an error
     if (!contact.firstName || !contact.lastName || !contact.address || !contact.city || !contact.email) {
         throw new Error("contact infos not filled in");
     }
@@ -176,17 +179,16 @@ function getContact() {
     return contact;
 }
 function displayErrorForm(elementId, msg) {
-    //verify element Id is available
+    //check if elementId is available
     if (elementId) {
         //get last element
         let lastChild = elementId.parentElement.lastElementChild;
-        //check if there already is an alert 
+        //check if there already is an alert
         if (lastChild.classList.contains("alert")) {
             removeAlert(elementId);
             console.log("already an alert");
         }
         //if no alert insert it after the element
-
         let string = '<div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">' +
             '<strong>' + msg + '</strong> ' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
@@ -201,24 +203,23 @@ function displayErrorForm(elementId, msg) {
     }
 }
 function removeAlert(elementId) {
-    //verify element Id est valable
+    //check if elementId is valid 
     if (elementId) {
         //get last element
         let lastChild = elementId.parentElement.lastElementChild;
-        //verifie qu il y a une alerte
+        //check if there is an alert
         if (lastChild.classList.contains("alert")) {
-            //enleve le html
+            //remove html
             lastChild.remove();
         }
     }
 }
 
 function addItem(name) {
-    //loop throught items
     for (let i in items) {
         //check name
         if (items[i].name == name) {
-            //ajoute 1 a count
+            //add 1 to count
             items[i].count += 1;
             break;
         }
@@ -233,7 +234,6 @@ function removeItemFromCart(name) {
             if (items[i].count <= 0) {
                 items.splice(i, 1);
             }
-            //exit loop
             break;
         }
     }
@@ -250,7 +250,7 @@ function removeAllItemsFromCart(name) {
 }
 
 function displayCart(items, elementId) {
-    //clear le html
+    //clear html
     elementId.textContent = "";
     for (let i = 0; i < items.length; i++) {
         let tempString =
@@ -280,12 +280,12 @@ function displayCart(items, elementId) {
     }
 }
 
-//trie par nom 
+//sort by name
 function sortItems(itemsArray) {
-    //on verifie que l array n est pas vide
+    //check if array is empty
     if (itemsArray) {
         let tempArray = itemsArray;
-        //trier par nom
+        //sort by name
         tempArray.sort(function (a, b) {
             if (a.name > b.name) {
                 return 1;
@@ -301,6 +301,6 @@ function sortItems(itemsArray) {
 
 function saveCart() {
     let storage = localStorage;
-    storage.setItem("panier", JSON.stringify(items));
+    storage.setItem("cart", JSON.stringify(items));
 }
 
