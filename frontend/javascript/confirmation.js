@@ -2,9 +2,9 @@ let orderId = document.getElementById("orderId");
 let totalPrice = document.getElementById("totalPrice");
 
 orderId.insertAdjacentHTML("afterbegin", JSON.parse(localStorage.orderId));
-totalPrice.insertAdjacentHTML("afterbegin", getPrixTotal());
+totalPrice.insertAdjacentHTML("afterbegin", getTotalPrice());
 
-function getPrixTotal() {
+function getTotalPrice() {
     let temp = 0;
     let items = JSON.parse(localStorage["cart"]);
     console.log(items);
